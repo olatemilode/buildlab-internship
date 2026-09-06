@@ -28,7 +28,7 @@ jobs:
         run: |
           node app.js &
           sleep 3
-          curl --fail htttp://localhost:3002 || exit 1
+          curl --fail http://localhost:3002 || exit 1
 
 
 
