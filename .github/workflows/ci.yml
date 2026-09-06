@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+   branches: 
+      - main
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@4
+
+    steps: 
+      - name: Set up Node.js
+        uses: actions/setup-node@4
+        with:
+          node-version: '18'
+
+      - name: Install dependecies
+        run: npm install
+
+      - name: Build check
+        run: node --check app.js
+
+      - name: Verify app starts successfully
+        run: |
+          node app.js &
+          sleep 3
+          curl --fail htttp://localhost:3002 || exit 1
+
+
+
+
+
+
+
+
+
+
+
+
