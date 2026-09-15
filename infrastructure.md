@@ -1,12 +1,12 @@
 # Infrastructure Documentation
 
-This document describes the current infrastructure supporting the `node-express-app` deployment, including AWS resources, configuration, and how they relate to one another.
+This document describes the  infrastructure supporting the `node-express-app` deployment, including AWS resources, configuration, and how they relate to one another.
 
 ## Overview
 
-The application runs as a containerized Node.js/Express service on AWS, built and deployed through an automated CI/CD pipeline. See `architecture-diagram.svg` for a visual overview of how these pieces connect.
+The application runs as a containerized Node.js/Express service on AWS, built and deployed through an automated CI/CD pipeline. See  for a visual overview of how these pieces connect.
 
-**Live application:** http://13.51.79.15:3002 *(public IP — changes if the task restarts, since no load balancer is attached)*
+**Live application:** http://13.51.79.15:3002 *public IP — changes if the task restarts*
 
 ## AWS Resources
 
@@ -20,7 +20,7 @@ All resources are provisioned in **eu-north-1** (Europe, Stockholm).
 
 ### Amazon ECS (Elastic Container Service)
 - **Cluster:** `node-express-app`
-- **Launch type:** Fargate (serverless — no EC2 instances to manage or patch)
+- **Launch type:** Fargate 
 - **Task definition family:** `node-express-task`
   - Container: `node-express-app`
   - Port mapping: 3002 (TCP)
