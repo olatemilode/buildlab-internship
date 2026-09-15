@@ -22,11 +22,10 @@ jobs:
 
     steps: 
       - name: Checkout code
-        uses: actions/checkout@4
-
-    steps: 
+        uses: actions/checkout@v4
+        
       - name: Set up Node.js
-        uses: actions/setup-node@4
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -38,7 +37,7 @@ jobs:
 
       - name: Verify app starts successfully
         run: |
-          node app.js &
+          node app.js & > app.log 2>&1 &
           sleep 3
           curl --fail htttp://localhost:3002 || (cat app.log && exit 1)
 
@@ -95,11 +94,3 @@ deploy:
         service: ${{ env.ECS_SERVICE }}
         cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
-
-
-
-
-
-
-
-
