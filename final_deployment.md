@@ -43,7 +43,7 @@ The same workflow file extends into a `deploy` job (runs only on pushes to `main
 
 ### Cloud Platform
 - **Amazon ECR** stores the built Docker images
-- **AWS ECS on Fargate** runs the container as a managed, serverless task — no EC2 instances to patch or maintain
+- **AWS ECS on Fargate** runs the container as a managed, serverless task 
 - **IAM role (`ecsTaskExecutionRole`)** grants ECS permission to pull images and write logs on the task's behalf
 
 
