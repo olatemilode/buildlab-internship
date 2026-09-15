@@ -7,15 +7,12 @@ This document describes the complete deployment journey of `node-express-app`, a
 **Live application:** http://13.51.79.15:3002
 **Repository:** https://github.com/olatemilode/buildlab-internship
 
----
 
 ## 1. Application
 
 **Base project:** [denisecase/node-express-app](https://github.com/denisecase/node-express-app) — a minimal, open-source Node.js/Express application with no existing Docker or deployment setup, chosen specifically to give full ownership over every containerization and deployment decision.
 
 The app listens on port 3002 and exposes a handful of demo routes (`/hello`, `/big`, `/fortune`, `/greeting/:name`, etc.).
-
----
 
 ## 2. Version Control & Containerization (Task 1)
 
@@ -26,8 +23,6 @@ The app listens on port 3002 and exposes a handful of demo routes (`/hello`, `/b
   - Runs the app with `CMD ["node", "app.js"]`
 - Built and ran the image locally, verifying the app responded correctly on `localhost:3002` before moving on.
 - Documented setup, build, and run instructions in the project README.
-
----
 
 ## 3. CI/CD Pipeline (Task 2)
 
@@ -51,12 +46,11 @@ The same workflow file extends into a `deploy` job (runs only on pushes to `main
 - **AWS ECS on Fargate** runs the container as a managed, serverless task — no EC2 instances to patch or maintain
 - **IAM role (`ecsTaskExecutionRole`)** grants ECS permission to pull images and write logs on the task's behalf
 
----
 
 ## 4. Monitoring & Automation (Task 3)
 
 ### Monitoring
-- **Logs:** CloudWatch Logs (`/ecs/node-express-task`) capture the application's stdout/stderr, confirming successful startup and surfacing any runtime errors
+- **Logs:** CloudWatch Logs (`/ecs/node-express-task`) capture the application's stdout, confirming successful startup and surfacing any runtime errors
 - **Resource usage:** CPU and memory utilization are visible via the ECS service's Health and metrics tab
 - **Availability:** ECS's Tasks tab shows real-time task status (running/stopped) and health
 
@@ -65,22 +59,8 @@ The same workflow file extends into a `deploy` job (runs only on pushes to `main
 2. **Health checks and restart policy** — the task definition includes a container health check (`curl -f http://localhost:3002/ || exit 1`, every 30 seconds, 3 retries), and ECS's service scheduler automatically replaces any task that fails its health check or stops unexpectedly, maintaining the desired count of 1 running task at all times
 
 ### Incident response
-A dedicated incident response guide (`INCIDENT_RESPONSE.md`) documents common issues encountered during this project — unreachable app, task restart loops, invalid CI workflow YAML, AWS authentication failures, Docker/ECR login issues, and local DNS problems — along with their causes and resolution steps.
+A dedicated incident response guide (`INCIDENT_RESPONSE.md`) documents common issues encountered during this project, along with their causes and resolution steps.
 
----
-
-## 5. Deployment Timeline Summary
-
-| Stage | Tooling | Outcome |
-|---|---|---|
-| Containerization | Docker (native Engine on WSL, not Docker Desktop) | Image builds and runs locally on port 3002 |
-| Image registry | Amazon ECR | Image stored and versioned by commit SHA |
-| Orchestration | Amazon ECS (Fargate) | Container runs as a managed task with health checks |
-| CI | GitHub Actions | Every push validated automatically |
-| CD | GitHub Actions → ECR → ECS | Every merge to `main` deploys automatically |
-| Monitoring | CloudWatch Logs & Metrics | Logs, CPU, and memory visible per task |
-
----
 
 ## 6. Environment Configuration
 
@@ -88,12 +68,10 @@ A dedicated incident response guide (`INCIDENT_RESPONSE.md`) documents common is
 - **Secrets:** AWS credentials for the CI/CD pipeline are stored as encrypted GitHub Actions repository secrets, never committed to source control
 - No application-level secrets (database credentials, API keys) are required for this project, as the app has no external dependencies
 
----
 
 ## 7. Known Limitations & Future Improvements
 
 - No load balancer — the public IP changes whenever the ECS task restarts; adding an Application Load Balancer would provide a stable DNS endpoint
-- No staging environment — all changes deploy directly to the single running service
-- No autoscaling — desired task count is fixed at 1 regardless of load
-- IAM permissions for the CI/CD pipeline are broader than strictly necessary; a future iteration would scope these down to least-privilege
-- No automated rollback on failed health checks beyond ECS's default task replacement behavior; a more advanced setup could automatically redeploy the last known-good task definition
+- No staging environment, all changes deploy directly to the single running service
+- No autoscaling, desired task count is fixed at 1 regardless of load
+ automated rollback on failed health checks beyond ECS's default task replacement behavior; a more advanced setup could automatically redeploy the last known-good task definition
