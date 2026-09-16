@@ -4,7 +4,7 @@ This document describes the  infrastructure supporting the `node-express-app` de
 
 ## Overview
 
-The application runs as a containerized Node.js/Express service on AWS, built and deployed through an automated CI/CD pipeline. See  for a visual overview of how these pieces connect.
+The application runs as a containerized Node.js/Express service on AWS, built and deployed through an automated CI/CD pipeline. See buildlab.io for a visual overview of how these pieces connect.
 
 **Live application:** http://13.51.79.15:3002 *public IP — changes if the task restarts*
 
