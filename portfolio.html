@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>node-express-app — DevOps portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F172A;
+    --surface: #1A2436;
+    --border: #2A3550;
+    --text: #E4E9F2;
+    --text-muted: #8B95A7;
+    --accent: #4FD1C5;
+    --amber: #F0A93F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 96px; }
+  header { margin-bottom: 56px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+  .lede { color: var(--text-muted); font-size: 17px; max-width: 60ch; }
+  .status-row { display: flex; gap: 20px; margin-top: 28px; flex-wrap: wrap; }
+  .status-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
+  .link-row { margin-top: 28px; display: flex; gap: 24px; flex-wrap: wrap; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  a:hover { border-bottom-color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  section { padding: 40px 0; border-top: 1px solid var(--border); }
+  section:first-of-type { border-top: none; }
+  h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  p { color: var(--text-muted); max-width: 64ch; margin-bottom: 12px; }
+  .stack-list { list-style: none; }
+  .stack-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .stack-list li:last-child { border-bottom: none; }
+  .stack-key { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text); }
+  .stack-val { font-size: 14px; color: var(--text-muted); text-align: right; }
+  .pipeline { margin-top: 8px; }
+  .pipeline-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+  }
+  .pipeline-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    padding-top: 2px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .pipeline-content h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .pipeline-content p { font-size: 14px; margin-bottom: 0; }
+  .doc-grid { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; }
+  .doc-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .doc-row:last-child { border-bottom: none; }
+  .doc-name { font-family: 'JetBrains Mono', monospace; color: var(--text); }
+  .doc-desc { color: var(--text-muted); text-align: right; }
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .callout p { margin-bottom: 0; font-size: 14px; }
+  footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  @media (max-width: 480px) {
+    h1 { font-size: 26px; }
+    .doc-row { flex-direction: column; gap: 2px; }
+    .doc-desc { text-align: left; }
+    .stack-list li { flex-direction: column; gap: 2px; }
+    .stack-val { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Devops portfolio</div>
+    <h1>node-express-app</h1>
+    <p class="lede">A plain open-source Node.js app, taken from zero DevOps tooling to a containerized, continuously deployed, monitored service on AWS — across three build phases: containerization, CI/CD, and infrastructure automation.</p>
+    <div class="status-row">
+      <div class="status-item"><span class="dot" style="background:var(--accent)"></span> CI/CD passing</div>
+      <div class="status-item"><span class="dot" style="background:var(--accent)"></span> ECS Fargate running</div>
+      <div class="status-item"><span class="dot"></span> Healr checks active</div>
+    </div>
+    <div class="link-row">
+      <a href="http://13.51.79.15:3002">Live application →</a>
+      <a href="https://github.com/olatemilode/buildlab-internship">GitHub repository →</a>
+    </div>
+  </header>
+
+  <section>
+    <h2>Stack</h2>
+    <ul class="stack-list">
+      <li><span class="stack-key">Runtime</span><span class="stack-val">Node.js 18 / Express</span></li>
+      <li><span class="stack-key">Container</span><span class="stack-val">Docker (node:18-alpine)</span></li>
+      <li><span class="stack-key">Registry</span><span class="stack-val">Amazon ECR</span></li>
+      <li><span class="stack-key">Compute</span><span class="stack-val">AWS ECS on Fargate</span></li>
+      <li><span class="stack-key">CI/CD</span><span class="stack-val">GitHub Actions</span></li>
+      <li><span class="stack-key">Monitoring</span><span class="stack-val">CloudWatch Logs & Metrics</span></li>
+      <li><span class="stack-key">Region</span><span class="stack-val">eu-north-1</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Pipeline</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-num">01</div>
+        <div class="pipeline-content">
+          <h4>Push to main</h4>
+          <p>Every commit triggers the workflow automatically — no manual build or deploy step.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-num">02</div>
+        <div class="pipeline-content">
+          <h4>Build & test</h4>
+          <p>Dependencies installed, syntax validated, app boot-tested with a live smoke check.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-num">03</div>
+        <div class="pipeline-content">
+          <h4>Push image to ECR</h4>
+          <p>New image built and tagged with both <code>latest</code> and the commit SHA.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-num">04</div>
+        <div class="pipeline-content">
+          <h4>Deploy to ECS</h4>
+          <p>Task definition updated, new revision rolled out, deployment stability confirmed.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-num">05</div>
+        <div class="pipeline-content">
+          <h4>Self-heal</h4>
+          <p>Health checks run every 30s; ECS replaces any task that fails, unattended.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Lessons Learned</h2>
+    <p>A working deployment isn't the finish line — a deployment that can tell you when something's wrong, and recover on its own, is a different level of maturity. Automating the pipeline removed an entire category of human error: no more manually rebuilding, tagging, or updating services by hand.</p>
+    <p>Just as valuable was the debugging itself. DNS failures, IAM permission gaps, malformed YAML, Docker auth issues — nearly every real problem came down to reading logs carefully and isolating one variable at a time, not assuming the first error message told the whole story.</p>
+    <div class="callout">
+      <p><strong style="color:var(--text)">With more time:</strong> add a load balancer for a stable endpoint, scope IAM permissions to least-privilege, introduce a staging environment, and add automated rollback on failed health checks.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Documentation</h2>
+    <div class="doc-grid">
+      <div class="doc-row"><span class="doc-name">README.md</span><span class="doc-desc">Setup & run instructions</span></div>
+      <div class="doc-row"><span class="doc-name">FINAL_DEPLOYMENT.md</span><span class="doc-desc">Full deployment journey</span></div>
+      <div class="doc-row"><span class="doc-name">INFRASTRUCTURE.md</span><span class="doc-desc">AWS resource inventory</span></div>
+      <div class="doc-row"><span class="doc-name">INCIDENT_RESPONSE.md</span><span class="doc-desc">Common issues & fixes</span></div>
+      <div class="doc-row"><span class="doc-name">biildlab.drawio</span><span class="doc-desc">System architecture</span></div>
+      <div class="doc-row"><span class="doc-name">TASK2_REFLECTION.md</span><span class="doc-desc">CI/CD reflection</span></div>
+      <div class="doc-row"><span class="doc-name">TASK3_REFLECTION.md</span><span class="doc-desc">Monitoring & automation reflection</span></div>
+    </div>
+  </section>
+
+  <footer>
+    Built by Folorunso Olamide — BuildLabs DevOps Internship
+  </footer>
+
+</div>
+</body>
+</html>
